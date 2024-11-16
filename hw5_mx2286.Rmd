@@ -13,25 +13,42 @@ library(broom)
 library(purrr)
 library(dplyr)
 library(tidyr)
+```
+## Problem2
+```{r 2-1: save 𝜇̂ and the p-value}
 set.seed(1)
+sim_p_true = function(true_mean){
+  data = rnorm(30, mean = true_mean, sd = 5)
+  test = t.test(data, mu=0)
+  result = broom::tidy(test)
+  result_df = result %>% 
+    dplyr::select(mu_hat = estimate, p_value = p.value) 
+  return (result_df)
+}
+
+test_results = expand_grid(
+  true_mean = 0:6,
+  iter = 1:5000
+) %>% 
+  mutate(simulation = map(true_mean, sim_p_true)) %>%
+  unnest(simulation) %>% 
+  mutate(indicator = as.numeric(p_value < 0.05))
 ```
 
-## R Markdown
+```{r 2-2: plot showing the proportion of times the null was rejected}
 
-This is an R Markdown document. Markdown is a simple formatting syntax for authoring HTML, PDF, and MS Word documents. For more details on using R Markdown see <http://rmarkdown.rstudio.com>.
+power_results = test_results %>%
+  group_by(true_mean) %>%
+  summarize(power = mean(p_value < 0.05))
 
-When you click the **Knit** button a document will be generated that includes both content as well as the output of any embedded R code chunks within the document. You can embed an R code chunk like this:
-
-```{r cars}
-summary(cars)
+ggplot(power_results, aes(x = true_mean, y = power)) +
+  geom_line() +
+  geom_point() +
+  labs(
+    title = "Proportion of times the null was rejected ",
+    x = "true mean (effect size)",
+    y = "power"
+  ) +
+  theme_minimal()
 ```
-
-## Including Plots
-
-You can also embed plots, for example:
-
-```{r pressure, echo=FALSE}
-plot(pressure)
-```
-
-Note that the `echo = FALSE` parameter was added to the code chunk to prevent printing of the R code that generated the plot.
+Comment: From the graph, we can see that the power increases as true mean increases and eventually be closer to 1. As the effect size increases, the power would increase.
