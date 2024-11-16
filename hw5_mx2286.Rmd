@@ -17,8 +17,6 @@ library(tidyr)
 
 # Problem 1: The Birthday Paradox
 ```{r}
-
-# Introduction
 # Given n people, we want to determine the probability that at least two share a birthday. 
 # Assume 365 uniformly distributed days and no leap years.
 
