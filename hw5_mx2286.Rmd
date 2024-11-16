@@ -42,9 +42,7 @@ plot(group_sizes, probabilities, type = 'b', pch = 19, col = 'blue',
      main = 'Probability of Shared Birthdays vs. Group Size')
 
 ```
-# The probability of at least two people sharing a birthday rises sharply with group size. 
-# By group size 23, the probability exceeds 50%, a well-known result of the Birthday Paradox.
-# As group size increases further, the probability approaches 1, making shared birthdays almost certain.
+The probability of at least two people sharing a birthday rises sharply with group size. By group size 23, the probability exceeds 50%, a well-known result of the Birthday Paradox. As group size increases further, the probability approaches 1, making shared birthdays almost certain.
 
 
 # Problem2
